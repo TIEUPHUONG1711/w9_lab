@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: nginx:1.27
+        image: nginx:1.28
         env:
         - name: APP_ENV
           valueFrom:
