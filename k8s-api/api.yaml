@@ -24,21 +24,25 @@ spec:
           containerPort: 8080
         env:
         - name: ERROR_RATE
-          value: "0"
+          value: "0.5"
         - name: VERSION
-          value: "v1"
+          value: "v2-bad"
         readinessProbe:
           httpGet:
             path: /healthz
             port: 8080
   strategy:
     canary:
+      analysis:
+        templates:
+        - templateName: api-success-rate
       steps:
       - setWeight: 25
-      - pause: {}
+      - pause:
+          duration: 60s
       - setWeight: 50
       - pause:
-          duration: 30s
+          duration: 60s
       - setWeight: 100
 ---
 apiVersion: v1
