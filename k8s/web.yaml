@@ -1,12 +1,12 @@
 apiVersion: v1
-kind: Namespace
+kind: Namespace #tạo namespace để chứa các tài nguyên của ứng dụng web, giúp phân tách và quản lý dễ dàng hơn các resources trong cluster như fe, be
 metadata:
   name: demo
   annotations:
     argocd.argoproj.io/sync-wave: "0"
 ---
 apiVersion: v1
-kind: ConfigMap
+kind: ConfigMap #lưu trữ cấu hình cho ứng dụng web như port, env vars, database connection strings, giúp tách biệt cấu hình khỏi mã nguồn và dễ dàng cập nhật mà không cần phải xây dựng lại image
 metadata:
   name: web-config
   namespace: demo
@@ -16,7 +16,7 @@ data:
   APP_ENV: "production"
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployment #tạo và quản lý pod cho ứng dụng web như số lượng replica, image, env vars
 metadata:
   name: web
   namespace: demo

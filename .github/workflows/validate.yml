@@ -1,5 +1,6 @@
 name: Validate Kubernetes YAML
-
+# .github/workflows/validate.yml thì đây là file cấu hình cho GitHub Actions, định nghĩa một workflow có tên "Validate Kubernetes YAML" để tự động kiểm tra tính hợp lệ của các manifest YAML của Kubernetes trong thư mục k8s/ mỗi khi có push hoặc pull request vào nhánh main. Workflow này sử dụng kubeconform để thực hiện việc validate, giúp đảm bảo rằng các manifest tuân thủ các schema và có thể được áp dụng thành công vào cluster Kubernetes.
+#có thể chạy thủ công trên git actions -> validate.yml -> run workflow
 on:
   push:
     branches:
@@ -14,7 +15,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install kubeconform
+    - name: Install kubeconform #dùng kubeconform để validate các manifest yaml của k8s, giúp đảm bảo rằng chúng tuân thủ các schema và có thể được áp dụng thành công vào cluster mà
       run: |
         curl -L -o kubeconform.tar.gz https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz
         tar -xzf kubeconform.tar.gz
