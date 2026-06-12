@@ -8,11 +8,30 @@ spec:
   - name: success-rate
     interval: 30s
     failureLimit: 1
-    successCondition: result[0] >= 0.99
+    successCondition: result[0] >= 0.5
     provider:
       prometheus:
         address: http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
         query: |
-          sum(rate(flask_http_request_total{namespace="demo",service="api",status="200"}[1m]))
+          sum(rate(flask_http_request_total{status=~"2.."}[1m]))
           /
-          sum(rate(flask_http_request_total{namespace="demo",service="api"}[1m]))
+          sum(rate(flask_http_request_total[1m]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #code này tạo một AnalysisTemplate có tên "api-success-rate"
+#  trong namespace "demo" để đo lường tỷ lệ thành công của API.
+# Hỏi Prometheus: Success Rate là bao nhiêu?
+

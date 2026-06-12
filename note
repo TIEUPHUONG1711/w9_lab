@@ -1,0 +1,222 @@
+1. app/
+app
+├─ app.py
+└─ Dockerfile
+Đây là: Code ứng dụng
+Chỉ là: Python API
+app.py
+@app.get("/")
+@app.get("/healthz")
+
+Tạo API. Dockerfile FROM python=> Đóng gói API thành image.
+
+2. argocd/apps
+│
+├─ frontend.yaml
+├─ backend.yaml
+├─ api.yaml
+│
+├─ kube-prometheus-stack.yaml
+├─ argo-rollouts.yaml
+│
+└─ monitoring
+    ├─ app.yaml
+    ├─ prometheusrule-test-alert.yaml
+    ├─ alertmanager-smtp-secret.yaml
+    └─ alertmanager-smtp-sealedsecret.yaml
+
+
+frontend.yaml
+→ Deploy Frontend
+
+backend.yaml
+→ Deploy Backend
+
+api.yaml
+→ Deploy API + Canary
+
+kube-prometheus-stack.yaml
+→ Cài Prometheus + Grafana + Alertmanager
+
+argo-rollouts.yaml
+→ Cài Argo Rollouts
+
+
+kube-prometheus-stack.yaml dùng để cài hệ monitoring, 
+còn thư mục monitoring/ dùng để cấu hình hệ monitoring 
+hoạt động như thế nào (alert gì, gửi mail cho ai, khi nào
+ cảnh báo).
+
+monitoring/app.yaml
+→ ArgoCD App cho monitoring
+
+prometheusrule-test-alert.yaml
+→ Luật tạo Alert
+
+alertmanager-smtp-secret.yaml
+→ Username/password gửi email
+
+alertmanager-smtp-sealedsecret.yaml
+→ Secret đã mã hóa để commit Git
+
+3. k8s/
+k8s
+├─ backend
+└─ frontend
+Đây là:
+
+Manifest Kubernetes
+backend/
+configmap.yaml
+deployment.yaml
+service.yaml
+
+ConfigMap: Lưu cấu hình
+Deployment: Tạo pod
+Service: Tạo endpoint
+Tại sao nằm trong k8s?
+Vì: Đây là tài nguyên Kubernetes
+4.k8s-api
+├─ api.yaml
+├─ servicemonitor.yaml
+├─ analysis.yaml
+└─ prometheusrule.yaml
+api.yaml: Rollout của API
+Nó tạo: api pod, api service
+
+Tại sao không để trong app?
+Vì:app = source code
+k8s-api =cách deploy source code
+
+Ví dụ:
+
+app.py
+
+là cái xe.
+
+api.yaml
+
+là hướng dẫn đậu xe.
+
+- servicemonitor.yaml
+
+Prometheus
+↓
+hãy đọc
+
+http://api:8080/metrics
+
+Tại sao để trong k8s-api?
+
+Vì nó liên quan trực tiếp:
+
+API
+analysis.yaml
+
+Đây là:
+
+AnalysisTemplate
+
+Nó hỏi Prometheus:
+
+Success Rate bao nhiêu?
+
+Ví dụ:
+
+95%
+
+Nếu:
+
+95 < 99
+
+thì:
+
+Fail
+
+Tại sao nằm ở k8s-api?
+
+Vì nó kiểm tra:
+
+API rollout
+prometheusrule.yaml
+
+File này dùng để:
+
+Prometheus Alert
+
+Ví dụ:
+
+Error Rate > 10%
+
+thì:
+
+Alert
+
+Nó thuộc:
+
+Observability
+
+nên để gần API.
+
+root.yaml
+argocd/root.yaml
+
+Đây là:
+
+Root App
+
+Nó quản lý:
+
+backend
+frontend
+api
+prometheus
+rollouts
+
+Giống:
+
+Giám đốc
+
+quản lý:
+
+nhân viên
+
+
+SOURCE CODE
+│
+└─ app/
+     ├─ app.py
+     └─ Dockerfile
+
+ARGOCD
+│
+└─ argocd/
+     ├─ root.yaml
+     └─ apps/
+
+KUBERNETES CƠ BẢN
+│
+└─ k8s/
+     ├─ frontend/
+     └─ backend/
+
+API DEPLOYMENT
+│
+└─ k8s-api/
+     └─ api.yaml
+
+OBSERVABILITY
+│
+└─ k8s-api/
+     ├─ servicemonitor.yaml
+     └─ prometheusrule.yaml
+
+CANARY + AUTO ABORT
+│
+└─ k8s-api/
+     └─ analysis.yaml
+
+CI
+│
+└─ .github/workflows/
+     └─ validate.yml

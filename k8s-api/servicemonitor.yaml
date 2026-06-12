@@ -13,3 +13,22 @@ spec:
   - port: http
     path: /metrics
     interval: 15s
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #code này tạo một ServiceMonitor để Prometheus có thể 
+# thu thập metrics từ service "api" trong namespace "demo". 
+# ServiceMonitor này sẽ tìm kiếm các service có label 
+# "app: api" và thu thập metrics từ cổng "http" tại đường dẫn 
+# "/metrics" mỗi 15 giây.    

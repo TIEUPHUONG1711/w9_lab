@@ -24,3 +24,21 @@ spec:
 
     syncOptions:
     - CreateNamespace=true
+
+
+
+
+
+
+
+
+
+
+
+
+
+# code này cài argo rollout controller vào cluster.
+#  Argo Rollouts là một công cụ để quản lý việc triển khai
+#   ứng dụng theo cách canary hoặc blue-green, 
+#   giúp bạn kiểm soát quá trình triển khai và giảm thiểu 
+#   rủi ro khi cập nhật ứng dụng.
