@@ -3,6 +3,8 @@ kind: Rollout
 metadata:
   name: api
   namespace: demo
+  annotations:
+    gitops.lastUpdated: "2026-06-12T00:00:00Z"
   labels:
     app: api
 spec:
