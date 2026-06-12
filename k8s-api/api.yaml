@@ -24,9 +24,9 @@ spec:
           containerPort: 8080
         env:
         - name: ERROR_RATE
-          value: "0.5"
+          value: "0"
         - name: VERSION
-          value: "v3-bad"
+          value: "v3"
         readinessProbe:
           httpGet:
             path: /healthz
@@ -59,3 +59,19 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
+
+
+
+
+
+
+
+
+
+
+
+
+# # Lab này không phải để deploy API. Nó để tạo một API có 
+# metric, cấu hình Prometheus đọc metric đó, để các lab sau
+#  Argo Rollouts và AnalysisTemplate có dữ liệu đánh giá 
+#  Canary Deployment và quyết định Auto Abort hay không.    
