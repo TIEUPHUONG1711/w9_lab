@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: test-email-alert
+  namespace: monitoring
+  labels:
+    role: prometheus-rule
+spec:
+  groups:
+  - name: test.rules
+    rules:
+    - alert: TestEmailAlert
+      expr: vector(1)
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Test alert to exercise Alertmanager email"
+        description: "This alert always fires (vector(1)). Replace/remove after test."
